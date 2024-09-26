@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_ExerciseView"
+            app:destination="@id/ExerciseView" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -23,6 +26,16 @@
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ExerciseView"
+        android:name="com.example.liftnotes.ExerciseView"
+        android:label="exercise_view_label"
+        tools:layout="@layout/exercise_view">
+
+        <action
+            android:id="@+id/action_ExerciseView_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>
