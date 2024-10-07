@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
+        <!-- Back button to return to the main page -->
         <Button
             android:id="@+id/button_second"
             android:layout_width="wrap_content"
@@ -21,15 +22,55 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
+        <!-- Input for adding workouts -->
+        <EditText
+            android:id="@+id/inputWorkouts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter workouts (e.g., BenchPress 3(225 for 10), Squat 4(315 for 8))"
+            android:layout_marginTop="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_second"
+            android:inputType="text" />
+
+        <!-- Button to add workouts -->
+        <Button
+            android:id="@+id/addWorkoutsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Note View"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Add Workouts"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="7dp" />
+            app:layout_constraintTop_toBottomOf="@id/inputWorkouts" />
+
+        <!-- Input for searching workouts -->
+        <EditText
+            android:id="@+id/searchWorkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter workout name to search"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addWorkoutsButton" />
+
+        <!-- Button to search workouts -->
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search Workout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchWorkout" />
+
+        <!-- TextView to display results -->
+        <TextView
+            android:id="@+id/displayResults"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Results will appear here"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
