@@ -1,6 +1,11 @@
 package com.example.liftnotes
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +17,14 @@ class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
+    private lateinit var dayName: String
 
     // List to store workout data
     private val workoutList = mutableListOf<LiftInfo>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +36,7 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.dayName.text = dayText;
 
         // Back button logic
         binding.buttonSecond.setOnClickListener {
@@ -86,4 +97,12 @@ class SecondFragment : Fragment() {
             return "$liftName: $sets sets ($weight lbs for $reps reps)"
         }
     }
+
+    companion object {
+        private var dayText = "";
+        fun newInstance(itemText: String) {
+            dayText = itemText;
+        }
+    }
+
 }
