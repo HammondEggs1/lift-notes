@@ -7,14 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentSecondBinding
+import com.google.gson.Gson
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
 
+    //Data Store created
+    private val Context.userPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(
+        name = "workouts"
+    )
+
     // List to store workout data
-    private val workoutList = mutableListOf<LiftInfo>()
+    private var workoutList = mutableListOf<LiftInfo>()
+
+    val workout_key = stringPreferencesKey("workout_list")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,10 +49,17 @@ class SecondFragment : Fragment() {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
 
+        lifecycleScope.launch {
+            workoutList.addAll(loadworkoutlist())
+        }
+
         // Add Workouts Button
         binding.addWorkoutsButton.setOnClickListener {
             val input = binding.inputWorkouts.text.toString()
             addMultipleWorkouts(input)
+            lifecycleScope.launch {
+                saveworkoutlist(workoutList)
+            }
         }
 
         // Search Workouts Button
@@ -86,4 +110,22 @@ class SecondFragment : Fragment() {
             return "$liftName: $sets sets ($weight lbs for $reps reps)"
         }
     }
+
+    //save workout list
+    private suspend fun saveworkoutlist(workoutList: List<LiftInfo>) {
+        val gson = Gson()
+        val workoutJson = gson.toJson(workoutList)
+        requireContext().userPreferencesDataStore.edit { preferences ->
+            preferences[workout_key] = workoutJson
+        }
+    }
+
+    private suspend fun loadworkoutlist(): List<LiftInfo> {
+        val gson = Gson()
+        val preferences = requireContext().userPreferencesDataStore.data.first()
+        val workoutJson = preferences[workout_key] ?: return emptyList()
+        //workoutList = gson.fromJson(workoutJson, Array<LiftInfo>::class.java).toMutableList()
+        return gson.fromJson(workoutJson, Array<LiftInfo>::class.java).toList()
+    }
+
 }
