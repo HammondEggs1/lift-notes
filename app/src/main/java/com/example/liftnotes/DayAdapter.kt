@@ -32,12 +32,13 @@ class DayAdapter(private val data: List<String>, private val click: ExerciseAdap
         recyclerView = holder.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(holder.itemView.context)
 
+        holder.button.setOnClickListener {
+            listener?.onItemClick(position, data[position])
+        }
+
         val data = exercises[position]
         adapter = ExerciseAdapter(data)
 
-        holder.button.setOnClickListener {
-            listener?.onItemClick(position)
-        }
         adapter.setOnItemClickListenerEx(click)
         recyclerView.adapter = adapter
 
@@ -57,7 +58,7 @@ class DayAdapter(private val data: List<String>, private val click: ExerciseAdap
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(position: Int, day: String)
     }
 
 

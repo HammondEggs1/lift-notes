@@ -39,18 +39,19 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.gson)
-    //implementation("com.google.code.gson:gson:2.11.0")
-    //implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation(libs.androidx.datastore.core.android)
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.gson)
+    implementation(libs.androidx.datastore.core.android)
+    //implementation("com.google.code.gson:gson:2.11.0")
 }
