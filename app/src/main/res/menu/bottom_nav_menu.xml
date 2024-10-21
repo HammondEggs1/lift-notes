@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_home"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ln_home_icon" />
+    <item android:id="@+id/action_new_activity"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ln_new_workout_icon" />
+    <item android:id="@+id/action_profile"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ln_profile_icon" />
+</menu>
