@@ -10,13 +10,15 @@
         android:id="@+id/exercise_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exercise"
         android:layout_weight="1"
-        android:textSize="28sp" />
+        android:fontFamily="@font/kanit_light"
+        android:text="Exercise"
+        android:textSize="20sp" />
 
     <ImageButton
         android:id="@+id/exercise_button2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:backgroundTint="@android:color/transparent"
         android:src="@drawable/baseline_chevron_right_24" />
 </LinearLayout>

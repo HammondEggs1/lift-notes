@@ -1,30 +1,37 @@
 package com.example.liftnotes
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentSecondBinding
+import com.google.gson.Gson
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
-    private lateinit var dayName: String
+
+    //Data Store created
+    private val Context.userPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(
+        name = "workouts"
+    )
 
     // List to store workout data
-    private val workoutList = mutableListOf<LiftInfo>()
+    private var workoutList = mutableListOf<LiftInfo>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    val workout_key = stringPreferencesKey("workout_list")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,17 +43,23 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.dayName.text = dayText;
 
         // Back button logic
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
 
+        lifecycleScope.launch {
+            workoutList.addAll(loadworkoutlist())
+        }
+
         // Add Workouts Button
         binding.addWorkoutsButton.setOnClickListener {
             val input = binding.inputWorkouts.text.toString()
             addMultipleWorkouts(input)
+            lifecycleScope.launch {
+                saveworkoutlist(workoutList)
+            }
         }
 
         // Search Workouts Button
@@ -98,11 +111,21 @@ class SecondFragment : Fragment() {
         }
     }
 
-    companion object {
-        private var dayText = "";
-        fun newInstance(itemText: String) {
-            dayText = itemText;
+    //save workout list
+    private suspend fun saveworkoutlist(workoutList: List<LiftInfo>) {
+        val gson = Gson()
+        val workoutJson = gson.toJson(workoutList)
+        requireContext().userPreferencesDataStore.edit { preferences ->
+            preferences[workout_key] = workoutJson
         }
+    }
+
+    private suspend fun loadworkoutlist(): List<LiftInfo> {
+        val gson = Gson()
+        val preferences = requireContext().userPreferencesDataStore.data.first()
+        val workoutJson = preferences[workout_key] ?: return emptyList()
+        //workoutList = gson.fromJson(workoutJson, Array<LiftInfo>::class.java).toMutableList()
+        return gson.fromJson(workoutJson, Array<LiftInfo>::class.java).toList()
     }
 
 }
