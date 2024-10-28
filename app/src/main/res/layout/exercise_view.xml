@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
+        android:backgroundTint="@color/dark_blue"
         android:fontFamily="@font/kanit_medium"
         android:text="Back"
         app:layout_constraintStart_toStartOf="parent"
