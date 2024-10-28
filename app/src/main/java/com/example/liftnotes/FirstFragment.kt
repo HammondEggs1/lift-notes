@@ -58,7 +58,7 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
 
     override fun onItemClick(position: Int, day: String) {
         // Handle the click here
-        SecondFragment.newInstance(day)
+        //SecondFragment.newInstance(day)
         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }
 

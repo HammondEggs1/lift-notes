@@ -54,4 +54,6 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.androidx.datastore.core.android)
     //implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.androidplot:androidplot-core:1.5.11")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
 }
