@@ -50,4 +50,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.gson)
+    implementation(libs.androidx.datastore.core.android)
+    //implementation("com.google.code.gson:gson:2.11.0")
 }
