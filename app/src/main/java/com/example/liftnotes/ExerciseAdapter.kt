@@ -20,7 +20,7 @@ class ExerciseAdapter(private val data: List<String>) : RecyclerView.Adapter<Exe
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textView.text = data[position]
         holder.button.setOnClickListener {
-            listener?.onItemClickEx(position)
+            listener?.onItemClickEx(position, data[position])
         }
     }
 
@@ -32,7 +32,7 @@ class ExerciseAdapter(private val data: List<String>) : RecyclerView.Adapter<Exe
     }
 
     interface OnItemClickListenerEx {
-        fun onItemClickEx(position: Int)
+        fun onItemClickEx(position: Int, exercise: String)
     }
 
     fun setOnItemClickListenerEx(listener: OnItemClickListenerEx) {

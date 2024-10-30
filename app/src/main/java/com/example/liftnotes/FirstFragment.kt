@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentFirstBinding
 import androidx.recyclerview.widget.RecyclerView
@@ -55,13 +56,16 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
     }
 
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(position: Int, day: String) {
         // Handle the click here
+        SecondFragment.newInstance(day)
         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }
 
-    override fun onItemClickEx(position: Int) {
+    override fun onItemClickEx(position: Int, exercise: String) {
+        ExerciseView.newInstanceEx(exercise)
         findNavController().navigate(R.id.action_FirstFragment_to_ExerciseView)
+
     }
 
 }

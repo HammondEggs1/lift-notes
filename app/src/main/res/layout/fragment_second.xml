@@ -16,6 +16,8 @@
             android:id="@+id/button_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/dark_blue"
+            android:fontFamily="@font/kanit_medium"
             android:text="Back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.032"
@@ -27,17 +29,20 @@
             android:id="@+id/inputWorkouts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter workouts (e.g., BenchPress 3(225 for 10), Squat 4(315 for 8))"
             android:layout_marginTop="50dp"
+            android:fontFamily="@font/kanit_light"
+            android:hint="Enter workouts (e.g., BenchPress 3(225 for 10), Squat 4(315 for 8))"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_second"
-            android:inputType="text" />
+            app:layout_constraintTop_toBottomOf="@id/button_second" />
 
         <!-- Button to add workouts -->
         <Button
             android:id="@+id/addWorkoutsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/dark_blue"
+            android:fontFamily="@font/kanit_medium"
             android:text="Add Workouts"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inputWorkouts" />
@@ -47,8 +52,9 @@
             android:id="@+id/searchWorkout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter workout name to search"
             android:layout_marginTop="20dp"
+            android:fontFamily="@font/kanit_light"
+            android:hint="Enter workout name to search"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addWorkoutsButton" />
 
@@ -57,6 +63,8 @@
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/dark_blue"
+            android:fontFamily="@font/kanit_medium"
             android:text="Search Workout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchWorkout" />
@@ -66,11 +74,27 @@
             android:id="@+id/displayResults"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/kanit_light"
             android:text="Results will appear here"
             android:textSize="18sp"
-            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchButton" />
+
+        <TextView
+            android:id="@+id/day_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginBottom="29dp"
+            android:text="Day Name"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_second"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.154"
+            app:layout_constraintStart_toEndOf="@+id/button_second"
+            app:layout_constraintTop_toTopOf="@+id/button_second"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
