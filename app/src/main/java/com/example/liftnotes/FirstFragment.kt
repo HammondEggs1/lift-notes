@@ -3,6 +3,7 @@ package com.example.liftnotes
 import DayAdapter
 import ExerciseAdapter
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentFirstBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
+import com.patrykandpatrick.vico.core.entry.FloatEntry
+import com.patrykandpatrick.vico.core.entry.entriesOf
+import com.patrykandpatrick.vico.core.entry.entryModelOf
+import java.text.FieldPosition
+import java.text.Format
+import java.text.ParsePosition
+import java.util.Random
 
 
 /**
@@ -48,6 +58,11 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         adapter = DayAdapter(data, this)
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
+        for (i in 1..Random().nextInt(10)) {
+            //need someway to add that data in multiple times
+        }
+        val chartEntryModelProducer = entryModelOf(entriesOf(Random().nextDouble()*100, Random().nextDouble()*100, 8f, Random().nextDouble()*100),entriesOf(Random().nextDouble()*100, Random().nextDouble()*100, 8f, Random().nextDouble()*100))
+        binding.chartView.setModel(chartEntryModelProducer)
     }
 
     override fun onDestroyView() {
