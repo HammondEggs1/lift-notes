@@ -31,6 +31,13 @@ class NotesFragment : Fragment() {
         return binding.root
     }
 
+    // Data class to store workout information
+    data class LiftInfo(val liftName: String, val sets: Int, val weight: Int, val reps: Int) {
+        override fun toString(): String {
+            return "$liftName: $sets sets ($weight lbs for $reps reps)"
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -38,7 +45,7 @@ class NotesFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences("WorkoutsApp", Context.MODE_PRIVATE)
 
         // Load saved workouts from SharedPreferences
-        loadSavedWorkouts()
+
 
         // Button click to save multiple workouts
         binding.saveWorkoutButton.setOnClickListener {
@@ -52,7 +59,7 @@ class NotesFragment : Fragment() {
         binding.retrieveWorkoutButton.setOnClickListener {
             val workoutName = getCurrentLineText(binding.noteEditText)
             if (workoutName.isNotEmpty()) {
-                retrieveMostRecentWorkout(workoutName)
+
             } else {
                 binding.noteEditText.setText("Please place the cursor on a workout line to search.")
             }
@@ -99,62 +106,11 @@ class NotesFragment : Fragment() {
             }
         }
 
-        // Save all added workouts at once
-        saveWorkouts()
     }
 
-    private fun saveWorkouts() {
-        val editor = sharedPreferences.edit()
-
-        for ((liftName, workouts) in workoutMap) {
-            val serializedWorkouts = workouts.map { it.serialize() }
-            editor.putStringSet(liftName, serializedWorkouts.toSet())
-        }
-        editor.apply()
-
-        Log.d(TAG, "All workouts saved: $workoutMap")
-    }
-
-    private fun loadSavedWorkouts() {
-        workoutMap.clear()
-
-        val allWorkouts = sharedPreferences.all
-        for ((liftName, workoutSet) in allWorkouts) {
-            if (workoutSet is Set<*>) {
-                val workouts = workoutSet.mapNotNull {
-                    LiftInfo.deserialize(it.toString())
-                }.toMutableList()
-                workoutMap[liftName] = workouts
-            }
-        }
-
-        Log.d(TAG, "Loaded workouts: $workoutMap")
-    }
-
-    private fun retrieveMostRecentWorkout(inputName: String) {
-        val normalizedInputName = inputName.trim().lowercase()
-
-        val workouts = workoutMap.entries.firstOrNull {
-            it.key.lowercase() == normalizedInputName
-        }?.value
-
-        if (workouts != null && workouts.isNotEmpty()) {
-            val mostRecentWorkout = workouts.last()
-            val currentText = binding.noteEditText.text.toString()
-            val newText = "$currentText${mostRecentWorkout.toString()}"
-
-            binding.noteEditText.setText(newText)
-            binding.noteEditText.setSelection(newText.length) // Move cursor to the end of the text
-            Log.d(TAG, "Most recent workout retrieved: $mostRecentWorkout")
-        } else {
-            Log.d(TAG, "No workout found for $inputName")
-            binding.noteEditText.append("\nNo workout found for $inputName")
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
-

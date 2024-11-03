@@ -14,6 +14,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -22,6 +23,7 @@ class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
+    private val sharedViewModel: MainActivity.SharedViewModel by activityViewModels()
 
     //Data Store created
     private val Context.userPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(
@@ -43,6 +45,10 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedViewModel.currentDay.observe(viewLifecycleOwner) { data ->
+            binding.dayName.text = data;
+        }
 
         // Back button logic
         binding.buttonSecond.setOnClickListener {

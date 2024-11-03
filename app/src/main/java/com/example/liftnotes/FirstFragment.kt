@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentFirstBinding
@@ -26,6 +27,7 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: DayAdapter
     private lateinit var context: Context
+    private val sharedViewModel: MainActivity.SharedViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,12 +60,12 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
 
     override fun onItemClick(position: Int, day: String) {
         // Handle the click here
-        SecondFragment.newInstance(day)
+        sharedViewModel.currentDay.value = day
         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }
 
     override fun onItemClickEx(position: Int, exercise: String) {
-        ExerciseView.newInstanceEx(exercise)
+        sharedViewModel.currentExercise.value = exercise
         findNavController().navigate(R.id.action_FirstFragment_to_ExerciseView)
 
     }

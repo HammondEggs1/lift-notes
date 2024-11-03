@@ -8,15 +8,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.liftnotes.databinding.ExerciseViewBinding
 
+
 class ExerciseView : Fragment() {
     private var _binding: ExerciseViewBinding? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ExHistoryAdapter
+    private val sharedViewModel: MainActivity.SharedViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -37,7 +40,9 @@ class ExerciseView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.exerciseText.text = exText;
+        sharedViewModel.currentExercise.observe(viewLifecycleOwner) { data ->
+            binding.exerciseText.text = data;
+        }
 
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -55,10 +60,4 @@ class ExerciseView : Fragment() {
         _binding = null
     }
 
-    companion object {
-        private var exText = "";
-        fun newInstanceEx(itemText: String) {
-            exText = itemText;
-        }
-    }
 }
