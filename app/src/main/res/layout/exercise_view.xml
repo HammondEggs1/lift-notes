@@ -54,8 +54,8 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
         android:layout_width="match_parent"
-        android:layout_height="237dp"
-        android:layout_marginTop="4dp"
+        android:layout_height="169dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/exercise_text" />
 </androidx.constraintlayout.widget.ConstraintLayout>
