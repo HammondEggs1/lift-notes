@@ -19,15 +19,16 @@ import com.jjoe64.graphview.series.LineGraphSeries
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entriesOf
 import com.patrykandpatrick.vico.core.entry.entryModelOf
+import com.patrykandpatrick.vico.core.marker.Marker
 import java.text.FieldPosition
 import java.text.Format
 import java.text.ParsePosition
+import java.util.Collections
 import java.util.Random
 
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
+ * A simple [Fragment] subclass as the default destination in the navigation.*/
 
 class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapter.OnItemClickListenerEx {
 
@@ -58,12 +59,14 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         adapter = DayAdapter(data, this)
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
+        lateinit var listdata :MutableList<List<FloatEntry>>
         for (i in 1..Random().nextInt(10)) {
-            //need someway to add that data in multiple times
+            listdata.add(entriesOf(Random().nextDouble()*100, Random().nextDouble()*100, Random().nextDouble()*100, Random().nextDouble()*100))
         }
-        val chartEntryModelProducer = entryModelOf(entriesOf(Random().nextDouble()*100, Random().nextDouble()*100, 8f, Random().nextDouble()*100),entriesOf(Random().nextDouble()*100, Random().nextDouble()*100, 8f, Random().nextDouble()*100))
-        binding.chartView.setModel(chartEntryModelProducer)
-    }
+        val list = listdata.toList()
+        val chartEntryModel = entryModelOf(list)// this does not work for somereason although
+        binding.chartView.setModel(chartEntryModel)//entryModelOf(entriesOf(4f, 12f, 8f, 16f), entriesOf(12f, 16f, 4f, 12f))
+    }                                              // works and both are  a list<list<floatEntry>
 
     override fun onDestroyView() {
         super.onDestroyView()
