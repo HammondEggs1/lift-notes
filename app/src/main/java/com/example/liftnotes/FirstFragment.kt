@@ -59,14 +59,15 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         adapter = DayAdapter(data, this)
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
-        lateinit var listdata :MutableList<List<FloatEntry>>
+        val listdata = mutableListOf(FloatEntry(0f,0f))
         for (i in 1..Random().nextInt(10)) {
-            listdata.add(entriesOf(Random().nextDouble()*100, Random().nextDouble()*100, Random().nextDouble()*100, Random().nextDouble()*100))
+            listdata.addAll(listOf(FloatEntry(0f, (Random().nextDouble()*100).toFloat()),(FloatEntry(1f, (Random().nextDouble()*100).toFloat())),(FloatEntry(0f, (Random().nextDouble()*100).toFloat())), (FloatEntry(0f, (Random().nextDouble()*100).toFloat()))))
         }
         val list = listdata.toList()
-        val chartEntryModel = entryModelOf(list)// this does not work for somereason although
-        binding.chartView.setModel(chartEntryModel)//entryModelOf(entriesOf(4f, 12f, 8f, 16f), entriesOf(12f, 16f, 4f, 12f))
-    }                                              // works and both are  a list<list<floatEntry>
+        val chartEntryModel = entryModelOf(list)
+        binding.chartView.setModel(chartEntryModel)
+        binding.chartView.setBackgroundColor(Color.parseColor("#00008B"))
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
