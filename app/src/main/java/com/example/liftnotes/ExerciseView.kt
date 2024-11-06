@@ -66,20 +66,18 @@ class ExerciseView : Fragment() {
         calendar.set(Calendar.DAY_OF_MONTH, 5);
         val d5 = calendar.time
         val graph = binding.graph
-        for (i in 1..Random().nextInt(10)) {//wont be needed for this view, but if main view has a graph on it
-            val rnd: Random = Random()
-            val datalist = arrayOf(
-                DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
-                DataPoint(d2, rnd.nextDouble()*100),//see documentation for that
-                DataPoint(d3, rnd.nextDouble()*100),
-                DataPoint(d4, rnd.nextDouble()*100),
-                DataPoint(d5, rnd.nextDouble()*100)
-            )
-            val series = LineGraphSeries(datalist)
-            series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-            series.title = "yippie$i";
-            graph.addSeries(series)
-        }
+        val rnd: Random = Random()
+        val datalist = arrayOf(
+            DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
+            DataPoint(d2, rnd.nextDouble()*100),//see documentation for that
+            DataPoint(d3, rnd.nextDouble()*100),
+            DataPoint(d4, rnd.nextDouble()*100),
+            DataPoint(d5, rnd.nextDouble()*100)
+        )
+        val series = LineGraphSeries(datalist)
+        series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        series.title = "yippie1";
+        graph.addSeries(series)
         graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
         graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
         graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
