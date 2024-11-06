@@ -48,19 +48,35 @@ class ExerciseView : Fragment() {
         adapter = ExHistoryAdapter(data)
         recyclerView.adapter = adapter
 
-        val calendar: Calendar = Calendar.getInstance()
+        var calendar: Calendar = Calendar.getInstance()
+        calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.YEAR, 2024);
+        val d1 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 2);
+        val d2 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 3);
+        val d3 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 4);
+        val d4 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 5);
+        val d5 = calendar.time
         val graph = binding.graph
         for (i in 1..Random().nextInt(10)) {//wont be needed for this view, but if main view has a graph on it
             val rnd: Random = Random()
-            val datalist = mutableListOf(( DataPoint(0.0,0.0)))
-            for (j in 1..Random().nextInt(10)) {
-                val d1: Date = calendar.time
-                calendar.add(Calendar.DATE, 1)
-                datalist.add(DataPoint(d1,Random().nextDouble()*100))
-            }
-            val series = LineGraphSeries(datalist.toTypedArray())
+            val datalist = arrayOf(
+                DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
+                DataPoint(d2, rnd.nextDouble()*100),//see documentation for that
+                DataPoint(d3, rnd.nextDouble()*100),
+                DataPoint(d4, rnd.nextDouble()*100),
+                DataPoint(d5, rnd.nextDouble()*100)
+            )
+            val series = LineGraphSeries(datalist)
             series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-
             series.title = "yippie$i";
             graph.addSeries(series)
         }
@@ -68,13 +84,15 @@ class ExerciseView : Fragment() {
         graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
         graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
         graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
-        graph.gridLabelRenderer.gridStyle =GridLabelRenderer.GridStyle.BOTH
+        graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
         graph.gridLabelRenderer.gridColor = Color.WHITE
         graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity))
         graph.viewport.setXAxisBoundsManual(true);
         graph.setBackgroundColor(Color.parseColor("#00008B"))
         graph.gridLabelRenderer.setHumanRounding(false);
         graph.legendRenderer.isVisible = true;
+        graph.legendRenderer.backgroundColor = 0
+        graph.legendRenderer.textColor=Color.WHITE
         graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
         binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_ExerciseView_to_FirstFragment)

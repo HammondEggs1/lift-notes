@@ -14,6 +14,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentFirstBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jjoe64.graphview.GridLabelRenderer
+import com.jjoe64.graphview.LegendRenderer
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.patrykandpatrick.vico.core.entry.FloatEntry
@@ -23,6 +26,7 @@ import com.patrykandpatrick.vico.core.marker.Marker
 import java.text.FieldPosition
 import java.text.Format
 import java.text.ParsePosition
+import java.util.Calendar
 import java.util.Collections
 import java.util.Random
 
@@ -59,14 +63,54 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         adapter = DayAdapter(data, this)
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
-        val listdata = mutableListOf(FloatEntry(0f,0f))
+
+
+        var calendar: Calendar = Calendar.getInstance()
+        calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.YEAR, 2024);
+        val d1 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 2);
+        val d2 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 3);
+        val d3 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 4);
+        val d4 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 5);
+        val d5 = calendar.time
+        val graph = binding.graph
         for (i in 1..Random().nextInt(10)) {
-            listdata.addAll(listOf(FloatEntry(0f, (Random().nextDouble()*100).toFloat()),(FloatEntry(1f, (Random().nextDouble()*100).toFloat())),(FloatEntry(0f, (Random().nextDouble()*100).toFloat())), (FloatEntry(0f, (Random().nextDouble()*100).toFloat()))))
+            val rnd: Random = Random()
+            val datalist = arrayOf( // need to turn whatever data into a list of times Date! and doubles
+                DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
+                DataPoint(d2, rnd.nextDouble()*100),//see documentation for that
+                DataPoint(d3, rnd.nextDouble()*100),
+                DataPoint(d4, rnd.nextDouble()*100),
+                DataPoint(d5, rnd.nextDouble()*100)
+            )
+            val series = LineGraphSeries(datalist)
+            series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            series.title = "yippie$i";
+            graph.addSeries(series)
         }
-        val list = listdata.toList()
-        val chartEntryModel = entryModelOf(list)
-        binding.chartView.setModel(chartEntryModel)
-        binding.chartView.setBackgroundColor(Color.parseColor("#00008B"))
+        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
+        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
+        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
+        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
+        graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
+        graph.gridLabelRenderer.gridColor = Color.WHITE
+        graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity))
+        graph.viewport.setXAxisBoundsManual(true);
+        graph.setBackgroundColor(Color.parseColor("#00008B"))
+        graph.gridLabelRenderer.setHumanRounding(false);
+        graph.legendRenderer.isVisible = true;
+        graph.legendRenderer.backgroundColor = 0
+        graph.legendRenderer.textColor=Color.WHITE
+        graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
     }
 
     override fun onDestroyView() {

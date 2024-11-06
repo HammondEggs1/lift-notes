@@ -78,17 +78,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-        <com.patrykandpatrick.vico.views.chart.ChartView
-            android:id="@+id/chart_view"
-            android:layout_width="369dp"
-            android:layout_height="225dp"
-            android:layout_marginTop="120dp"
-            app:chart="line"
-            app:labelColor="@color/white"
-            app:color="@color/dark_blue"
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph"
+            android:layout_width="340dp"
+            android:layout_height="245dp"
+            app:layout_constraintBottom_toTopOf="@+id/spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:showBottomAxis="true"
-            app:showStartAxis="true" />
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.358" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

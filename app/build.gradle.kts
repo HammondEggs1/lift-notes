@@ -79,10 +79,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("com.jjoe64:graphview:4.2.2")
-    
-    implementation("com.patrykandpatrick.vico:compose:1.15.0")
-    implementation("com.patrykandpatrick.vico:compose-m2:1.15.0")
-    implementation("com.patrykandpatrick.vico:compose-m3:1.15.0")
-    implementation("com.patrykandpatrick.vico:core:1.15.0")
-    implementation("com.patrykandpatrick.vico:views:1.15.0")
+
+    implementation("com.patrykandpatrick.vico:compose:1.16.0-alpha.1")
+
+    // For `compose`. Creates a `ChartStyle` based on an M2 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m2:1.16.0-alpha.1")
+
+    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m3:1.16.0-alpha.1")
+
+    // Houses the core logic for charts and other elements. Included in all other modules.
+    implementation("com.patrykandpatrick.vico:core:1.16.0-alpha.1")
+
+    // For the view system.
+    implementation("com.patrykandpatrick.vico:views:1.16.0-alpha.1")
 }
