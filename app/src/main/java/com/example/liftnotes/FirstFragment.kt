@@ -46,7 +46,7 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val data = listOf("Leg Day", "Push Day", "Pull Day")
+        val data = listOf("Leg Day", "Push Day", "Pull Day", "New Day")
         adapter = DayAdapter(data, this)
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
@@ -61,12 +61,12 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
     override fun onItemClick(position: Int, day: String) {
         // Handle the click here
         sharedViewModel.currentDay.value = day
-        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        sharedViewModel.currentFragment.value = "second"
     }
 
     override fun onItemClickEx(position: Int, exercise: String) {
         sharedViewModel.currentExercise.value = exercise
-        findNavController().navigate(R.id.action_FirstFragment_to_ExerciseView)
+        sharedViewModel.currentFragment.value = "exercise"
 
     }
 

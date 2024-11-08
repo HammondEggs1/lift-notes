@@ -51,7 +51,7 @@ class ExerciseView : Fragment() {
         recyclerView.adapter = adapter
 
         binding.back.setOnClickListener {
-            findNavController().navigate(R.id.action_ExerciseView_to_FirstFragment)
+            sharedViewModel.currentFragment.value = "first"
         }
     }
 
