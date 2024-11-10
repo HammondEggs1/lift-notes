@@ -6,14 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.liftnotes.ManageStorage
 import com.example.liftnotes.databinding.FragmentSecondBinding
-import com.google.gson.Gson
-import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -23,15 +17,10 @@ class SecondFragment : Fragment() {
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
 
-    //Data Store created
-    private val Context.userPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(
-        name = "workouts"
-    )
 
     // List to store workout data
-    private var workoutList = mutableListOf<LiftInfo>()
+    private val workoutList = mutableListOf<ManageStorage.LiftInfo>()
 
-    val workout_key = stringPreferencesKey("workout_list")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +39,7 @@ class SecondFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            workoutList.addAll(loadworkoutlist())
+            workoutList.addAll(ManageStorage.loadWorkoutList(requireContext()))
         }
 
         // Add Workouts Button
@@ -58,7 +47,7 @@ class SecondFragment : Fragment() {
             val input = binding.inputWorkouts.text.toString()
             addMultipleWorkouts(input)
             lifecycleScope.launch {
-                saveworkoutlist(workoutList)
+                ManageStorage.saveWorkoutList(requireContext(), workoutList)
             }
         }
 
@@ -86,7 +75,7 @@ class SecondFragment : Fragment() {
 
             if (matchResult != null) {
                 val (liftName, sets, weight, reps) = matchResult.destructured
-                workoutList.add(LiftInfo(liftName, sets.toInt(), weight.toInt(), reps.toInt()))
+                workoutList.add(ManageStorage.LiftInfo(liftName, sets.toInt(), weight.toInt(), reps.toInt()))
             } else {
                 binding.displayResults.text = "Invalid format for: $workout"
             }
@@ -95,37 +84,13 @@ class SecondFragment : Fragment() {
     }
 
     // Find the most recent workout by name
-    private fun findMostRecentWorkout(liftName: String): LiftInfo? {
+    private fun findMostRecentWorkout(liftName: String): ManageStorage.LiftInfo? {
         return workoutList.reversed().find { it.liftName.equals(liftName, ignoreCase = true) }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    // Data class to store workout information
-    data class LiftInfo(val liftName: String, val sets: Int, val weight: Int, val reps: Int) {
-        override fun toString(): String {
-            return "$liftName: $sets sets ($weight lbs for $reps reps)"
-        }
-    }
-
-    //save workout list
-    private suspend fun saveworkoutlist(workoutList: List<LiftInfo>) {
-        val gson = Gson()
-        val workoutJson = gson.toJson(workoutList)
-        requireContext().userPreferencesDataStore.edit { preferences ->
-            preferences[workout_key] = workoutJson
-        }
-    }
-
-    private suspend fun loadworkoutlist(): List<LiftInfo> {
-        val gson = Gson()
-        val preferences = requireContext().userPreferencesDataStore.data.first()
-        val workoutJson = preferences[workout_key] ?: return emptyList()
-        //workoutList = gson.fromJson(workoutJson, Array<LiftInfo>::class.java).toMutableList()
-        return gson.fromJson(workoutJson, Array<LiftInfo>::class.java).toList()
     }
 
 }
