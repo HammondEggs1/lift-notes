@@ -1,5 +1,4 @@
 package com.example.liftnotes
-
 import com.google.gson.Gson
 import android.content.Context
 import androidx.datastore.core.DataStore
