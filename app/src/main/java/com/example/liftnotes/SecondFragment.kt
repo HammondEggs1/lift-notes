@@ -1,5 +1,4 @@
 package com.example.liftnotes
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
