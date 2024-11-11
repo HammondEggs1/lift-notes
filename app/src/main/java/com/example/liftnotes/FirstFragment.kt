@@ -20,10 +20,6 @@ import com.jjoe64.graphview.LegendRenderer
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-import com.patrykandpatrick.vico.core.entry.FloatEntry
-import com.patrykandpatrick.vico.core.entry.entriesOf
-import com.patrykandpatrick.vico.core.entry.entryModelOf
-import com.patrykandpatrick.vico.core.marker.Marker
 import java.text.FieldPosition
 import java.text.Format
 import java.text.ParsePosition
