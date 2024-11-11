@@ -9,31 +9,34 @@
     <!-- Editable text area for the workout -->
     <EditText
         android:id="@+id/noteEditText"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="390dp"
+        android:layout_height="558dp"
         android:layout_margin="16dp"
-        android:hint="Start typing your workout..."
-        android:textSize="18sp"
         android:gravity="top|start"
-        android:inputType="textMultiLine|textCapSentences"
+        android:hint="Start typing your workout..."
         android:imeOptions="actionDone"
-        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="textMultiLine|textCapSentences"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/saveWorkoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Button to save the workout -->
+
+    <!-- Button to retrieve the most recent workout -->
+
     <Button
         android:id="@+id/saveWorkoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save Workout"
         app:layout_constraintBottom_toTopOf="@+id/retrieveWorkoutButton"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noteEditText" />
 
-    <!-- Button to retrieve the most recent workout -->
     <Button
         android:id="@+id/retrieveWorkoutButton"
         android:layout_width="wrap_content"
