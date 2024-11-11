@@ -4,10 +4,12 @@ import ExHistoryAdapter
 import android.content.BroadcastReceiver
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,25 +24,35 @@ import java.util.Date
 import java.util.Random
 
 
+
 class ExerciseView : Fragment() {
     private var _binding: ExerciseViewBinding? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ExHistoryAdapter
+    private val sharedViewModel: MainActivity.SharedViewModel by activityViewModels()
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var receiver: BroadcastReceiver
     private lateinit var dayName: String
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
+
         _binding = ExerciseViewBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedViewModel.currentExercise.observe(viewLifecycleOwner) { data ->
+            binding.exerciseText.text = data;
+        }
 
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -93,7 +105,7 @@ class ExerciseView : Fragment() {
         graph.legendRenderer.textColor=Color.WHITE
         graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
         binding.back.setOnClickListener {
-            findNavController().navigate(R.id.action_ExerciseView_to_FirstFragment)
+            sharedViewModel.currentFragment.value = "first"
         }
     }
 

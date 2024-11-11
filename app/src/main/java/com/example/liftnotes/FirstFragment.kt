@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentFirstBinding
@@ -32,7 +33,8 @@ import java.util.Random
 
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.*/
+ * A simple [Fragment] subclass as the default destination in the navigation.
+ */
 
 class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapter.OnItemClickListenerEx {
 
@@ -41,6 +43,7 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: DayAdapter
     private lateinit var context: Context
+    private val sharedViewModel: MainActivity.SharedViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,7 +62,7 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val data = listOf("Leg Day", "Push Day", "Pull Day")
+        val data = listOf("Leg Day", "Push Day", "Pull Day", "New Day")
         adapter = DayAdapter(data, this)
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
@@ -121,13 +124,13 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
 
     override fun onItemClick(position: Int, day: String) {
         // Handle the click here
-        //SecondFragment.newInstance(day)
-        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        sharedViewModel.currentDay.value = day
+        sharedViewModel.currentFragment.value = "second"
     }
 
     override fun onItemClickEx(position: Int, exercise: String) {
-        ExerciseView.newInstanceEx(exercise)
-        findNavController().navigate(R.id.action_FirstFragment_to_ExerciseView)
+        sharedViewModel.currentExercise.value = exercise
+        sharedViewModel.currentFragment.value = "exercise"
 
     }
 
