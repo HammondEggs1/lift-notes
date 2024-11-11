@@ -48,7 +48,7 @@ class ExerciseView : Fragment() {
         adapter = ExHistoryAdapter(data)
         recyclerView.adapter = adapter
 
-        var calendar: Calendar = Calendar.getInstance()
+        var calendar: Calendar = Calendar.getInstance()//can be deleted jstu for show
         calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.YEAR, 2024);
@@ -63,13 +63,13 @@ class ExerciseView : Fragment() {
         calendar.set(Calendar.DAY_OF_MONTH, 4);
         val d4 = calendar.time
         calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 5);
+        calendar.set(Calendar.DAY_OF_MONTH, 5); //  can be deleted just for show
         val d5 = calendar.time
         val graph = binding.graph
         val rnd: Random = Random()
         val datalist = arrayOf(
             DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
-            DataPoint(d2, rnd.nextDouble()*100),//see documentation for that
+            DataPoint(d2, rnd.nextDouble()*100),
             DataPoint(d3, rnd.nextDouble()*100),
             DataPoint(d4, rnd.nextDouble()*100),
             DataPoint(d5, rnd.nextDouble()*100)
