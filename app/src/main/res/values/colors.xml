@@ -3,4 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="button_green">#4CAF50</color>
+    <color name="dark_blue">#2D2B93</color>
+    <color name="light_blue">#6B89CF</color>
+    <color name="orange">#E87727</color>
+    <color name="dark_gray">#5A5A5A</color>
+    <color name="light_gray">#B3B3C3</color>
 </resources>
