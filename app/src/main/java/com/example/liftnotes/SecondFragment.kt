@@ -1,7 +1,4 @@
 package com.example.liftnotes
-
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import com.example.liftnotes.databinding.FragmentSecondBinding
 
 class SecondFragment : Fragment() {
@@ -18,12 +18,10 @@ class SecondFragment : Fragment() {
     private val binding get() = _binding!!
     private val sharedViewModel: MainActivity.SharedViewModel by activityViewModels()
 
-    private lateinit var sharedPreferences: SharedPreferences
-    private val WORKOUT_KEY = "workouts"
     private val TAG = "NotesFragment"
 
     // To store all workouts (using a Map where the key is the workout name)
-    private val workoutMap = mutableMapOf<String, MutableList<LiftInfo>>()
+    private val workoutMap = mutableMapOf<String, MutableList<ManageStorage.LiftInfo>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +37,6 @@ class SecondFragment : Fragment() {
         sharedViewModel.currentDay.observe(viewLifecycleOwner) { data ->
             binding.dayName.text = data;
         }
-
-        // Initialize SharedPreferences
-        sharedPreferences = requireContext().getSharedPreferences("WorkoutsApp", Context.MODE_PRIVATE)
 
         // Load saved workouts from SharedPreferences
         loadSavedWorkouts()
@@ -92,7 +87,7 @@ class SecondFragment : Fragment() {
 
             if (matchResult != null) {
                 val (liftName, sets, weight, reps) = matchResult.destructured
-                val newWorkout = LiftInfo(liftName.trim(), sets.toInt(), weight.toInt(), reps.toInt())
+                val newWorkout = ManageStorage.LiftInfo(liftName.trim(), sets.toInt(), weight.toInt(), reps.toInt())
 
                 if (workoutMap.containsKey(liftName)) {
                     workoutMap[liftName]?.add(newWorkout)
@@ -110,31 +105,32 @@ class SecondFragment : Fragment() {
     }
 
     private fun saveWorkouts() {
-        val editor = sharedPreferences.edit()
+        // Flatten the map to a list for storage
+        val allWorkouts = workoutMap.values.flatten()
 
-        for ((liftName, workouts) in workoutMap) {
-            val serializedWorkouts = workouts.map { it.serialize() }
-            editor.putStringSet(liftName, serializedWorkouts.toSet())
+        // Save the workouts to DataStore
+        lifecycleScope.launch {
+            ManageStorage.saveWorkoutList(requireContext(), allWorkouts)
+            Log.d(TAG, "All workouts saved: $allWorkouts")
         }
-        editor.apply()
-
-        Log.d(TAG, "All workouts saved: $workoutMap")
     }
 
     private fun loadSavedWorkouts() {
-        workoutMap.clear()
+        // Load workouts from DataStore
+        lifecycleScope.launch {
+            val loadedWorkouts = ManageStorage.loadWorkoutList(requireContext())
+            workoutMap.clear()
 
-        val allWorkouts = sharedPreferences.all
-        for ((liftName, workoutSet) in allWorkouts) {
-            if (workoutSet is Set<*>) {
-                val workouts = workoutSet.mapNotNull {
-                    LiftInfo.deserialize(it.toString())
-                }.toMutableList()
-                workoutMap[liftName] = workouts
+            // Rebuild the workoutMap from the loaded workouts
+            for (workout in loadedWorkouts) {
+                if (workoutMap.containsKey(workout.liftName)) {
+                    workoutMap[workout.liftName]?.add(workout)
+                } else {
+                    workoutMap[workout.liftName] = mutableListOf(workout)
+                }
             }
+            Log.d(TAG, "Loaded workouts: $workoutMap")
         }
-
-        Log.d(TAG, "Loaded workouts: $workoutMap")
     }
 
     private fun retrieveMostRecentWorkout(inputName: String) {
@@ -161,26 +157,5 @@ class SecondFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-}
-
-data class LiftInfo(val liftName: String, val sets: Int, val weight: Int, val reps: Int) {
-    fun serialize(): String {
-        return "$liftName,$sets,$weight,$reps"
-    }
-
-    companion object {
-        fun deserialize(serialized: String): LiftInfo? {
-            val parts = serialized.split(",")
-            return if (parts.size == 4) {
-                LiftInfo(parts[0], parts[1].toInt(), parts[2].toInt(), parts[3].toInt())
-            } else {
-                null
-            }
-        }
-    }
-
-    override fun toString(): String {
-        return "$sets sets ($weight lbs for $reps reps)"
     }
 }
