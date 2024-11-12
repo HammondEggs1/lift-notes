@@ -8,8 +8,9 @@
         android:id="@+id/exercise_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Placeholder"
         android:layout_marginBottom="5sp"
-        android:textSize = "24sp"/>
+        android:layout_weight="1"
+        android:fontFamily="@font/kanit_light"
+        android:text="Placeholder"
+        android:textSize="24sp" />
 </LinearLayout>

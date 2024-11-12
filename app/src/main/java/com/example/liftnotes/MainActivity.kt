@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -37,17 +38,29 @@ class MainActivity : AppCompatActivity() {
 
         sharedViewModel.currentExercise.value = "Bicep Curls"
         sharedViewModel.currentDay.value = "Leg Day"
+        sharedViewModel.currentFragment.value = "first"
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
+
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.action_home -> navController.navigate(R.id.FirstFragment)
-                R.id.action_new_activity ->  navController.navigate(R.id.SecondFragment)
-                R.id.action_stats ->  navController.navigate(R.id.ExerciseView)
+                    R.id.action_home -> navController.navigate(R.id.FirstFragment)
+                    R.id.action_new_activity ->  navController.navigate(R.id.SecondFragment)
+                    R.id.action_stats ->  navController.navigate(R.id.ExerciseView)
             }
             true
+        }
+
+        sharedViewModel.currentFragment.observe(this) { data ->
+            if(data=="first") {
+                bottomNav.setSelectedItemId(R.id.action_home)
+            } else if(data=="second") {
+                bottomNav.setSelectedItemId(R.id.action_new_activity)
+            } else {
+                bottomNav.setSelectedItemId(R.id.action_stats)
+            }
         }
 
     }
@@ -61,6 +74,7 @@ class MainActivity : AppCompatActivity() {
     class SharedViewModel : ViewModel() {
         val currentExercise = MutableLiveData<String>()
         val currentDay = MutableLiveData<String>()
+        val currentFragment = MutableLiveData<String>()
     }
 
 }
