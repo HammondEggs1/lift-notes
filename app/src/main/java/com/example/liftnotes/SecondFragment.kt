@@ -1,5 +1,7 @@
 package com.example.liftnotes
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -41,14 +43,6 @@ class SecondFragment : Fragment() {
         // Load saved workouts from SharedPreferences
         loadSavedWorkouts()
 
-        // Button click to save multiple workouts
-        binding.saveWorkoutButton.setOnClickListener {
-            val input = binding.noteEditText.text.toString()
-            if (input.isNotEmpty()) {
-                addWorkoutsFromTextBox(input)  // Save each line as a separate workout
-            }
-        }
-
         // Button click to retrieve the most recent workout by name
         binding.retrieveWorkoutButton.setOnClickListener {
             val workoutName = getCurrentLineText(binding.noteEditText)
@@ -58,6 +52,28 @@ class SecondFragment : Fragment() {
                 binding.noteEditText.setText("Please place the cursor on a workout line to search.")
             }
         }
+
+        binding.repsUp.setOnClickListener {
+            //TODO
+        }
+
+        binding.weightUp.setOnClickListener {
+            //TODO
+        }
+
+        binding.noteEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if(binding.repsUp.visibility == View.VISIBLE) {
+                    binding.repsUp.visibility = View.INVISIBLE
+                    binding.weightUp.visibility = View.INVISIBLE
+                    binding.retrieveWorkoutButton.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     // Retrieve only the current line text in EditText based on cursor position
@@ -148,10 +164,21 @@ class SecondFragment : Fragment() {
             binding.noteEditText.setText(newText)
             binding.noteEditText.setSelection(newText.length) // Move cursor to the end of the text
             Log.d(TAG, "Most recent workout retrieved: $mostRecentWorkout")
+            binding.repsUp.visibility = View.VISIBLE
+            binding.weightUp.visibility = View.VISIBLE
+            binding.retrieveWorkoutButton.visibility = View.INVISIBLE
         } else {
             Log.d(TAG, "No workout found for $inputName")
             binding.noteEditText.append("\nNo workout found for $inputName")
         }
+    }
+
+    override fun onPause() {
+        val input = binding.noteEditText.text.toString()
+        if (input.isNotEmpty()) {
+            addWorkoutsFromTextBox(input)  // Save each line as a separate workout
+        }
+        super.onPause()
     }
 
     override fun onDestroyView() {
