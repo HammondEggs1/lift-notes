@@ -4,14 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotesFragment">
+    tools:context=".SecondFragment">
+
+    <!-- Display day name -->
+    <TextView
+        android:id="@+id/day_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="16dp"
+        android:text="Day Name"
+        android:textSize="34sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Editable text area for the workout -->
-
-    <!-- Button to save the workout -->
-
-    <!-- Button to retrieve the most recent workout -->
-
     <EditText
         android:id="@+id/noteEditText"
         android:layout_width="393dp"
@@ -29,6 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/day_name"
         app:layout_constraintVertical_bias="0.909" />
 
+    <!-- Button to retrieve the most recent workout -->
     <Button
         android:id="@+id/retrieveWorkoutButton"
         android:layout_width="wrap_content"
@@ -42,17 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/day_name"
         app:layout_constraintVertical_bias="0.531" />
 
-    <TextView
-        android:id="@+id/day_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="16dp"
-        android:text="Day Name"
-        android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    <!-- Button to increment weight -->
     <Button
         android:id="@+id/weight_up"
         android:layout_width="wrap_content"
@@ -64,6 +62,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/retrieveWorkoutButton" />
 
+    <!-- Button to increment reps -->
     <Button
         android:id="@+id/reps_up"
         android:layout_width="wrap_content"
@@ -75,4 +74,5 @@
         app:layout_constraintHorizontal_bias="0.258"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/retrieveWorkoutButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
