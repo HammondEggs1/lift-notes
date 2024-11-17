@@ -10,55 +10,69 @@
 
     <!-- Button to save the workout -->
 
+    <!-- Button to retrieve the most recent workout -->
+
     <EditText
         android:id="@+id/noteEditText"
-        android:layout_width="379dp"
-        android:layout_height="503dp"
+        android:layout_width="393dp"
+        android:layout_height="568dp"
         android:layout_margin="16dp"
+        android:layout_marginTop="36dp"
         android:gravity="top|start"
         android:hint="Start typing your workout..."
         android:imeOptions="actionDone"
         android:inputType="textMultiLine|textCapSentences"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/saveWorkoutButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.875"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/day_name" />
+        app:layout_constraintTop_toBottomOf="@+id/day_name"
+        app:layout_constraintVertical_bias="0.909" />
 
-    <Button
-        android:id="@+id/saveWorkoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Workout"
-        android:backgroundTint="@color/dark_blue"
-        android:fontFamily="@font/kanit_medium"
-        app:layout_constraintBottom_toTopOf="@+id/retrieveWorkoutButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteEditText" />
-
-    <!-- Button to retrieve the most recent workout -->
     <Button
         android:id="@+id/retrieveWorkoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Retrieve Last Workout"
         android:backgroundTint="@color/dark_blue"
         android:fontFamily="@font/kanit_medium"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Retrieve Last Workout"
+        app:layout_constraintBottom_toTopOf="@+id/noteEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveWorkoutButton" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day_name"
+        app:layout_constraintVertical_bias="0.531" />
 
     <TextView
         android:id="@+id/day_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="128dp"
         android:layout_marginTop="16dp"
         android:text="Day Name"
-        android:textSize="24sp"
+        android:textSize="34sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/weight_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weight Up"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.744"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/retrieveWorkoutButton" />
+
+    <Button
+        android:id="@+id/reps_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:text="Reps Up"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/weight_up"
+        app:layout_constraintHorizontal_bias="0.258"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/retrieveWorkoutButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

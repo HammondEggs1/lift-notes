@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.liftnotes.FirstFragment
 import com.example.liftnotes.R
+import com.google.android.material.textfield.TextInputLayout
 
 
 class DayAdapter(private val data: List<String>, private val click: ExerciseAdapter.OnItemClickListenerEx) : RecyclerView.Adapter<DayAdapter.ViewHolder>() {
@@ -40,6 +41,7 @@ class DayAdapter(private val data: List<String>, private val click: ExerciseAdap
             holder.linearLayout.setOrientation(LinearLayout.VERTICAL);
             holder.linearLayout.setGravity(Gravity.CENTER)
             holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30F)
+
             holder.button.setOnClickListener {
                 // future add day ability here
             }
@@ -49,7 +51,8 @@ class DayAdapter(private val data: List<String>, private val click: ExerciseAdap
             }
             val data = exercises[position]
             adapter = ExerciseAdapter(data)
-
+            holder.editText.layoutParams.width = 0
+            holder.editText.layoutParams.height = 0
             adapter.setOnItemClickListenerEx(click)
             recyclerView.adapter = adapter
         }
@@ -67,6 +70,7 @@ class DayAdapter(private val data: List<String>, private val click: ExerciseAdap
         val recyclerView: RecyclerView = itemView.findViewById(R.id.recycler_view)
         val button : Button = itemView.findViewById(R.id.button_one)
         val linearLayout: LinearLayout = itemView.findViewById(R.id.linear_layout)
+        val editText: TextInputLayout = itemView.findViewById(R.id.edit_text)
     }
 
     interface OnItemClickListener {
