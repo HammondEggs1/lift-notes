@@ -88,7 +88,7 @@ class ExerciseView : Fragment() {
         )
         val series = LineGraphSeries(datalist)
         series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        series.title = "yippie1";
+        series.title = "Exercise";
         graph.addSeries(series)
         graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
         graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;

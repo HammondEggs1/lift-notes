@@ -93,7 +93,7 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
             )
             val series = LineGraphSeries(datalist)
             series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-            series.title = "yippie$i";
+            series.title = "Exercise $i";
             graph.addSeries(series)
         }
         graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
