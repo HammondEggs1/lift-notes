@@ -33,7 +33,7 @@
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/graph" />
 
         <!-- logo -->
         <ImageView
@@ -65,18 +65,18 @@
 <!--            app:layout_constraintTop_toBottomOf="@+id/textView" />-->
 
         <!-- graph dropdown menu -->
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="409dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="24dp"
-            android:spinnerMode="dropdown"
-            android:backgroundTint="@color/light_gray"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/graph" />
+<!--        <Spinner-->
+<!--            android:id="@+id/spinner"-->
+<!--            android:layout_width="409dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:layout_marginBottom="24dp"-->
+<!--            android:spinnerMode="dropdown"-->
+<!--            android:backgroundTint="@color/light_gray"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/recyclerView"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/graph" />-->
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph"
