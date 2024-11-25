@@ -54,12 +54,66 @@ class SecondFragment : Fragment() {
         }
 
         binding.repsUp.setOnClickListener {
-            //TODO
+            val currentText = binding.noteEditText.text.toString()
+            Log.d(TAG, "Current text in noteEditText: $currentText")
+
+            // Updated regex to match "LiftName sets (weight lbs for reps reps)"
+            val regex = "(.+?)\\s(\\d+)\\ssets\\s\\((\\d+)\\s\\w+\\sfor\\s(\\d+)\\s\\w+\\)".toRegex()
+            val matchResult = regex.find(currentText)
+
+            Log.d(TAG, "Match result: ${matchResult?.value ?: "No match found"}")
+
+            if (matchResult != null) {
+                // Extract lift name, sets, weight, and reps
+                val (liftName, sets, weight, reps) = matchResult.destructured
+                val updatedReps = reps.toInt() + 1
+
+                // Replace only the reps part
+                val updatedText = currentText.replace(
+                    "$liftName $sets sets ($weight lbs for $reps reps)",
+                    "$liftName $sets sets ($weight lbs for $updatedReps reps)"
+                )
+
+                binding.noteEditText.setText(updatedText)
+                binding.noteEditText.setSelection(updatedText.length)
+                Log.d(TAG, "Reps increased to: $updatedReps")
+            } else {
+                Log.d(TAG, "The text format does not match 'LiftName sets (weight lbs for reps reps)' pattern.")
+                binding.noteEditText.append("\nInvalid workout format.")
+            }
         }
 
         binding.weightUp.setOnClickListener {
-            //TODO
+            val currentText = binding.noteEditText.text.toString()
+            Log.d(TAG, "Current text in noteEditText: $currentText")
+
+            // Reuse the updated regex pattern
+            val regex = "(.+?)\\s(\\d+)\\ssets\\s\\((\\d+)\\s\\w+\\sfor\\s(\\d+)\\s\\w+\\)".toRegex()
+            val matchResult = regex.find(currentText)
+
+            Log.d(TAG, "Match result: ${matchResult?.value ?: "No match found"}")
+
+            if (matchResult != null) {
+                // Extract lift name, sets, weight, and reps
+                val (liftName, sets, weight, reps) = matchResult.destructured
+                val updatedWeight = weight.toInt() + 10
+
+                // Replace only the weight part
+                val updatedText = currentText.replace(
+                    "$liftName $sets sets ($weight lbs for $reps reps)",
+                    "$liftName $sets sets ($updatedWeight lbs for $reps reps)"
+                )
+
+                binding.noteEditText.setText(updatedText)
+                binding.noteEditText.setSelection(updatedText.length)
+                Log.d(TAG, "Weight increased to: $updatedWeight") //for debugging
+            } else {
+                Log.d(TAG, "The text format does not match 'LiftName sets (weight lbs for reps reps)' pattern.")
+                binding.noteEditText.append("\nInvalid workout format.")
+            }
         }
+
+        //the buttons disappear after clicking because of the text watcher!!! what the heck!
 
         binding.noteEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -180,6 +234,8 @@ class SecondFragment : Fragment() {
         }
         super.onPause()
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

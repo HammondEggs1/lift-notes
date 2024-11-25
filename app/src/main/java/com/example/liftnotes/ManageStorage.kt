@@ -24,7 +24,7 @@ object ManageStorage {
 
     data class LiftInfo(val liftName: String, val sets: Int, val weight: Int, val reps: Int) {
         override fun toString(): String {
-            return "$liftName: $sets sets ($weight lbs for $reps reps)"
+            return " $sets sets ($weight lbs for $reps reps)"
         }
     }
 
