@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentFirstBinding
@@ -20,6 +21,7 @@ import com.jjoe64.graphview.LegendRenderer
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
+import kotlinx.coroutines.launch
 import java.text.FieldPosition
 import java.text.Format
 import java.text.ParsePosition
@@ -63,7 +65,6 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
 
-
         var calendar: Calendar = Calendar.getInstance()
         calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -82,35 +83,40 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         calendar.set(Calendar.DAY_OF_MONTH, 5);
         val d5 = calendar.time
         val graph = binding.graph
-        for (i in 1..Random().nextInt(10)) {
-            val rnd: Random = Random()
-            val datalist = arrayOf( // need to turn whatever data into a list of times Date! and doubles
-                DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
-                DataPoint(d2, rnd.nextDouble()*100),//see documentation for that
-                DataPoint(d3, rnd.nextDouble()*100),
-                DataPoint(d4, rnd.nextDouble()*100),
-                DataPoint(d5, rnd.nextDouble()*100)
-            )
-            val series = LineGraphSeries(datalist)
-            series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-            series.title = "Exercise $i";
-            graph.addSeries(series)
+        lifecycleScope.launch {
+            val context = requireContext()
+            val exercises = ManageStorage.loadWorkoutList(context)
+            for (exercise in exercises) {
+                val rnd: Random = Random()
+                val datalist = arrayOf( // need to turn whatever data into a list of times Date! and doubles
+                    DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
+                    DataPoint(d2, rnd.nextDouble()*100),//see documentation for that
+                    DataPoint(d3, rnd.nextDouble()*100),
+                    DataPoint(d4, rnd.nextDouble()*100),
+                    DataPoint(d5, rnd.nextDouble()*100)
+                )
+                val series = LineGraphSeries(datalist)
+                series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                series.title = exercise.liftName;
+                graph.addSeries(series)
+            }
+            graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
+            graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
+            graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
+            graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
+            graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
+            graph.gridLabelRenderer.gridColor = Color.WHITE
+            graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity))
+            graph.viewport.setXAxisBoundsManual(true);
+            graph.setBackgroundColor(Color.parseColor("#00008B"))
+            graph.gridLabelRenderer.setHumanRounding(false);
+            graph.legendRenderer.isVisible = true;
+            graph.legendRenderer.backgroundColor = 0
+            graph.legendRenderer.textColor=Color.WHITE
+            graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
+            graph.gridLabelRenderer.numHorizontalLabels = 3
         }
-        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
-        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
-        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
-        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
-        graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
-        graph.gridLabelRenderer.gridColor = Color.WHITE
-        graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity))
-        graph.viewport.setXAxisBoundsManual(true);
-        graph.setBackgroundColor(Color.parseColor("#00008B"))
-        graph.gridLabelRenderer.setHumanRounding(false);
-        graph.legendRenderer.isVisible = true;
-        graph.legendRenderer.backgroundColor = 0
-        graph.legendRenderer.textColor=Color.WHITE
-        graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
-        graph.gridLabelRenderer.numHorizontalLabels = 3
+
     }
 
     override fun onDestroyView() {
