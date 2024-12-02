@@ -15,6 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.liftnotes.databinding.ExerciseViewBinding
 import kotlinx.coroutines.launch
+import android.graphics.Color
+import com.jjoe64.graphview.GridLabelRenderer
+import com.jjoe64.graphview.LegendRenderer
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
+import java.util.Calendar
+import java.util.Date
+import java.util.Random
 
 class ExerciseView : Fragment() {
     private var _binding: ExerciseViewBinding? = null
@@ -49,7 +58,50 @@ class ExerciseView : Fragment() {
             val exercises = ManageStorage.loadWorkoutList(context)
             displayExercises(exercises)
         }
-
+        var calendar: Calendar = Calendar.getInstance()//can be deleted just for show
+        calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
+        calendar.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_WEEK - 3);
+        calendar.set(Calendar.YEAR, 2024);
+        val d1 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 2);
+        val d2 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 3);
+        val d3 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 4);
+        val d4 = calendar.time
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 5); //  can be deleted just for show
+        val d5 = calendar.time
+        val graph = binding.graph
+        val rnd: Random = Random()
+        val datalist = arrayOf(
+            DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
+            DataPoint(d2, rnd.nextDouble()*100),
+            DataPoint(d3, rnd.nextDouble()*100),
+            DataPoint(d4, rnd.nextDouble()*100),
+            DataPoint(d5, rnd.nextDouble()*100)
+        )
+        val series = LineGraphSeries(datalist)
+        series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        series.title = "Exercise";
+        graph.addSeries(series)
+        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE
+        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE
+        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE
+        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE
+        graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
+        graph.gridLabelRenderer.gridColor = Color.WHITE
+        graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity))
+        graph.viewport.setXAxisBoundsManual(true);
+        graph.setBackgroundColor(Color.parseColor("#00008B"))
+        graph.gridLabelRenderer.setHumanRounding(false);
+        graph.legendRenderer.isVisible = true
+        graph.legendRenderer.backgroundColor = 0
+        graph.legendRenderer.textColor=Color.WHITE
+        graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
         binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_ExerciseView_to_FirstFragment)
         }
