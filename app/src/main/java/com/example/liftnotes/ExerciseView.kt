@@ -1,4 +1,4 @@
-package com.example.liftnotes;
+package com.example.liftnotes
 
 import ExHistoryAdapter
 import android.content.BroadcastReceiver
@@ -60,9 +60,9 @@ class ExerciseView : Fragment() {
         adapter = ExHistoryAdapter(data)
         recyclerView.adapter = adapter
 
-        var calendar: Calendar = Calendar.getInstance()//can be deleted jstu for show
+        var calendar: Calendar = Calendar.getInstance()//can be deleted just for show
         calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_WEEK - 3);
         calendar.set(Calendar.YEAR, 2024);
         val d1 = calendar.time
         calendar = Calendar.getInstance()
@@ -90,17 +90,17 @@ class ExerciseView : Fragment() {
         series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         series.title = "Exercise";
         graph.addSeries(series)
-        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
-        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
-        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
-        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
+        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE
+        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE
+        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE
+        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE
         graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
         graph.gridLabelRenderer.gridColor = Color.WHITE
         graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity))
         graph.viewport.setXAxisBoundsManual(true);
         graph.setBackgroundColor(Color.parseColor("#00008B"))
         graph.gridLabelRenderer.setHumanRounding(false);
-        graph.legendRenderer.isVisible = true;
+        graph.legendRenderer.isVisible = true
         graph.legendRenderer.backgroundColor = 0
         graph.legendRenderer.textColor=Color.WHITE
         graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
