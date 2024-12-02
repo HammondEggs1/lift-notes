@@ -13,7 +13,7 @@ import com.example.liftnotes.R
 import com.google.android.material.textfield.TextInputLayout
 
 
-class DayAdapter(private val data: List<String>, private val click: ExerciseAdapter.OnItemClickListenerEx) : RecyclerView.Adapter<DayAdapter.ViewHolder>() {
+class DayAdapter(private val data: MutableList<String>, private val click: ExerciseAdapter.OnItemClickListenerEx) : RecyclerView.Adapter<DayAdapter.ViewHolder>() {
 
     private lateinit var recyclerView: RecyclerView
     public lateinit var adapter: ExerciseAdapter
@@ -36,21 +36,20 @@ class DayAdapter(private val data: List<String>, private val click: ExerciseAdap
         recyclerView = holder.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(holder.itemView.context)
 
-
-        if(data[position]=="New Day") {
-            holder.linearLayout.setOrientation(LinearLayout.VERTICAL);
-            holder.linearLayout.setGravity(Gravity.CENTER)
+        if (data[position] == "New Day") {
+            holder.linearLayout.orientation = LinearLayout.VERTICAL
+            holder.linearLayout.gravity = Gravity.CENTER
             holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30F)
 
             holder.button.setOnClickListener {
-                // future add day ability here
+                addNewDay("Custom Day") // Generate a new day name
             }
         } else {
             holder.button.setOnClickListener {
                 listener?.onItemClick(position, data[position])
             }
-            val data = exercises[position]
-            adapter = ExerciseAdapter(data)
+            val dayExercises = exercises[position % exercises.size] // Cycle exercises for simplicity
+            adapter = ExerciseAdapter(dayExercises)
             holder.editText.layoutParams.width = 0
             holder.editText.layoutParams.height = 0
             adapter.setOnItemClickListenerEx(click)
@@ -58,10 +57,15 @@ class DayAdapter(private val data: List<String>, private val click: ExerciseAdap
         }
     }
 
+    fun addNewDay(dayName: String) {
+        val newPosition = data.size - 1 // Add before "New Day"
+        data.add(newPosition, dayName)
+        notifyItemInserted(newPosition)
+    }
+
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
-
 
     override fun getItemCount() = data.size
 

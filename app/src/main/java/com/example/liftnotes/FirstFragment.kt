@@ -58,7 +58,7 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val data = listOf("Leg Day", "Push Day", "Pull Day", "New Day")
+        val data = mutableListOf("Leg Day", "Push Day", "Pull Day", "New Day")
         adapter = DayAdapter(data, this)
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
