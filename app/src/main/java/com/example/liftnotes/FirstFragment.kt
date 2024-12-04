@@ -11,22 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentFirstBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.LegendRenderer
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.coroutines.launch
-import java.text.FieldPosition
-import java.text.Format
-import java.text.ParsePosition
-import java.util.Calendar
-import java.util.Collections
 import java.util.Random
 
 
@@ -65,58 +57,55 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
 
-        var calendar: Calendar = Calendar.getInstance()
-        calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.YEAR, 2024);
-        val d1 = calendar.time
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 2);
-        val d2 = calendar.time
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 3);
-        val d3 = calendar.time
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 4);
-        val d4 = calendar.time
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 5);
-        val d5 = calendar.time
         val graph = binding.graph
         lifecycleScope.launch {
             val context = requireContext()
-            val exercises = ManageStorage.loadWorkoutList(context)
+            val exercises = ManageStorage.loadWorkoutList(context) // need format of title = exercise and array of weight values
+            var i = 0
+            var maxy = 0.0
+            val alreadyGraphed : MutableList<String> = ArrayList()
             for (exercise in exercises) {
+                val dataListMutable : MutableList<DataPoint> = ArrayList()
+                if (alreadyGraphed.contains(exercise.liftName)) {
+                    continue
+                }
+                alreadyGraphed.add(exercise.liftName)
+                for (exercise2 in exercises) {
+                    if (exercise.liftName == exercise2.liftName) {
+                        dataListMutable.add(DataPoint(i.toDouble(), exercise2.weight.toDouble()))
+                        if (exercise2.weight > maxy) {
+                            maxy = exercise2.weight.toDouble()
+                        }
+                        i += 1
+                    }
+
+                }
+                val dataList = dataListMutable.toTypedArray()
+                val series = LineGraphSeries(dataList)
                 val rnd: Random = Random()
-                val datalist = arrayOf( // need to turn whatever data into a list of times Date! and doubles
-                    DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
-                    DataPoint(d2, rnd.nextDouble()*100),//see documentation for that
-                    DataPoint(d3, rnd.nextDouble()*100),
-                    DataPoint(d4, rnd.nextDouble()*100),
-                    DataPoint(d5, rnd.nextDouble()*100)
-                )
-                val series = LineGraphSeries(datalist)
                 series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-                series.title = exercise.liftName;
+                series.title = exercise.liftName; //BenchPress 10(2 for 200)
                 graph.addSeries(series)
+                i = 0
             }
-            graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
-            graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
             graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
             graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
             graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
             graph.gridLabelRenderer.gridColor = Color.WHITE
-            graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity))
-            graph.viewport.setXAxisBoundsManual(true);
+            //graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity)) // cant use dates due to no
+            //graph.viewport.setXAxisBoundsManual(true);                                     //dates in the data structure
             graph.setBackgroundColor(Color.parseColor("#00008B"))
-            graph.gridLabelRenderer.setHumanRounding(false);
+            //graph.gridLabelRenderer.setHumanRounding(false) // causes bad y axis bug sometimes
+            graph.viewport.setMinY(0.0) // can be removed if unwanted
+            graph.viewport.setMaxY(maxy)
+            graph.viewport.setYAxisBoundsManual(true);
             graph.legendRenderer.isVisible = true;
             graph.legendRenderer.backgroundColor = 0
             graph.legendRenderer.textColor=Color.WHITE
             graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
             graph.gridLabelRenderer.numHorizontalLabels = 3
+            graph.gridLabelRenderer.numVerticalLabels = 3
         }
-
     }
 
     override fun onDestroyView() {
