@@ -15,6 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.liftnotes.databinding.ExerciseViewBinding
 import kotlinx.coroutines.launch
+import android.graphics.Color
+import com.jjoe64.graphview.GridLabelRenderer
+import com.jjoe64.graphview.LegendRenderer
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
+import java.util.Calendar
+import java.util.Date
+import java.util.Random
 
 class ExerciseView : Fragment() {
     private var _binding: ExerciseViewBinding? = null
@@ -42,14 +51,57 @@ class ExerciseView : Fragment() {
 
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-
+        val graph = binding.graph
         // Load exercises from ManageStorage
         lifecycleScope.launch {
             val context = requireContext()
             val exercises = ManageStorage.loadWorkoutList(context)
             displayExercises(exercises)
-        }
+            var i = 0
+            var maxy = 0.0
+            val alreadyGraphed : MutableList<String> = ArrayList()
+            for (exercise in exercises) {
+                val dataListMutable : MutableList<DataPoint> = ArrayList()
+                if (alreadyGraphed.contains(exercise.liftName)) {
+                    continue
+                }
+                alreadyGraphed.add(exercise.liftName)
+                for (exercise2 in exercises) {
+                    if (exercise.liftName == exercise2.liftName) {
+                        dataListMutable.add(DataPoint(i.toDouble(), exercise2.weight.toDouble()))
+                        if (exercise2.weight > maxy) {
+                            maxy = exercise2.weight.toDouble()
+                        }
+                        i += 1
+                    }
 
+                }
+                val dataList = dataListMutable.toTypedArray()
+                val series = LineGraphSeries(dataList)
+                val rnd: Random = Random()
+                series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                series.title = exercise.liftName; //BenchPress 10(2 for 200)
+                graph.addSeries(series)
+                i = 0
+            }
+            graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
+            graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
+            graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
+            graph.gridLabelRenderer.gridColor = Color.WHITE
+            //graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity)) // cant use dates due to no
+            //graph.viewport.setXAxisBoundsManual(true);                                     //dates in the data structure
+            graph.setBackgroundColor(Color.parseColor("#00008B"))
+            //graph.gridLabelRenderer.setHumanRounding(false) // causes bad y axis bug sometimes
+            graph.viewport.setMinY(0.0) // can be removed if unwanted
+            graph.viewport.setMaxY(maxy)
+            graph.viewport.setYAxisBoundsManual(true);
+            graph.legendRenderer.isVisible = true;
+            graph.legendRenderer.backgroundColor = 0
+            graph.legendRenderer.textColor=Color.WHITE
+            graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
+            graph.gridLabelRenderer.numHorizontalLabels = 3 // turn to zero to hide the x axis labels
+            graph.gridLabelRenderer.numVerticalLabels = 3
+        }
         binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_ExerciseView_to_FirstFragment)
         }
