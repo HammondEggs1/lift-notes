@@ -51,57 +51,57 @@ class ExerciseView : Fragment() {
 
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-
+        val graph = binding.graph
         // Load exercises from ManageStorage
         lifecycleScope.launch {
             val context = requireContext()
             val exercises = ManageStorage.loadWorkoutList(context)
             displayExercises(exercises)
+            var i = 0
+            var maxy = 0.0
+            val alreadyGraphed : MutableList<String> = ArrayList()
+            for (exercise in exercises) {
+                val dataListMutable : MutableList<DataPoint> = ArrayList()
+                if (alreadyGraphed.contains(exercise.liftName)) {
+                    continue
+                }
+                alreadyGraphed.add(exercise.liftName)
+                for (exercise2 in exercises) {
+                    if (exercise.liftName == exercise2.liftName) {
+                        dataListMutable.add(DataPoint(i.toDouble(), exercise2.weight.toDouble()))
+                        if (exercise2.weight > maxy) {
+                            maxy = exercise2.weight.toDouble()
+                        }
+                        i += 1
+                    }
+
+                }
+                val dataList = dataListMutable.toTypedArray()
+                val series = LineGraphSeries(dataList)
+                val rnd: Random = Random()
+                series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                series.title = exercise.liftName; //BenchPress 10(2 for 200)
+                graph.addSeries(series)
+                i = 0
+            }
+            graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
+            graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
+            graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
+            graph.gridLabelRenderer.gridColor = Color.WHITE
+            //graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity)) // cant use dates due to no
+            //graph.viewport.setXAxisBoundsManual(true);                                     //dates in the data structure
+            graph.setBackgroundColor(Color.parseColor("#00008B"))
+            //graph.gridLabelRenderer.setHumanRounding(false) // causes bad y axis bug sometimes
+            graph.viewport.setMinY(0.0) // can be removed if unwanted
+            graph.viewport.setMaxY(maxy)
+            graph.viewport.setYAxisBoundsManual(true);
+            graph.legendRenderer.isVisible = true;
+            graph.legendRenderer.backgroundColor = 0
+            graph.legendRenderer.textColor=Color.WHITE
+            graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
+            graph.gridLabelRenderer.numHorizontalLabels = 3 // turn to zero to hide the x axis labels
+            graph.gridLabelRenderer.numVerticalLabels = 3
         }
-        var calendar: Calendar = Calendar.getInstance()//can be deleted just for show
-        calendar.set(Calendar.MONTH, Calendar.NOVEMBER);
-        calendar.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_WEEK - 3);
-        calendar.set(Calendar.YEAR, 2024);
-        val d1 = calendar.time
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 2);
-        val d2 = calendar.time
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 3);
-        val d3 = calendar.time
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 4);
-        val d4 = calendar.time
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 5); //  can be deleted just for show
-        val d5 = calendar.time
-        val graph = binding.graph
-        val rnd: Random = Random()
-        val datalist = arrayOf(
-            DataPoint(d1, rnd.nextDouble()*100),// data point can use date for x param
-            DataPoint(d2, rnd.nextDouble()*100),
-            DataPoint(d3, rnd.nextDouble()*100),
-            DataPoint(d4, rnd.nextDouble()*100),
-            DataPoint(d5, rnd.nextDouble()*100)
-        )
-        val series = LineGraphSeries(datalist)
-        series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        series.title = "Exercise";
-        graph.addSeries(series)
-        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE
-        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE
-        graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE
-        graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE
-        graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
-        graph.gridLabelRenderer.gridColor = Color.WHITE
-        graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity))
-        graph.viewport.setXAxisBoundsManual(true);
-        graph.setBackgroundColor(Color.parseColor("#00008B"))
-        graph.gridLabelRenderer.setHumanRounding(false);
-        graph.legendRenderer.isVisible = true
-        graph.legendRenderer.backgroundColor = 0
-        graph.legendRenderer.textColor=Color.WHITE
-        graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
         binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_ExerciseView_to_FirstFragment)
         }

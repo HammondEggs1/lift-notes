@@ -103,7 +103,7 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
             graph.legendRenderer.backgroundColor = 0
             graph.legendRenderer.textColor=Color.WHITE
             graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
-            graph.gridLabelRenderer.numHorizontalLabels = 3
+            graph.gridLabelRenderer.numHorizontalLabels = 3 // turn to zero to hide the x axis labels
             graph.gridLabelRenderer.numVerticalLabels = 3
         }
     }
