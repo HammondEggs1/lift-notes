@@ -19,9 +19,9 @@ class DayAdapter(private val data: MutableList<String>, private val click: Exerc
     public lateinit var adapter: ExerciseAdapter
     private var listener: OnItemClickListener? = null
     val exercises = arrayOf(
-        listOf("Back Squat", "Calf Pulses", "Leg Extensions", "Lunges"),
-        listOf("Bench Press", "Skull Crushers", "Overhead Presses", "Face Pulls"),
-        listOf("Bicep Curls", "Lat Pull Downs", "Deadlift", "Supermans", "Rows")
+        listOf("Squats", "Lunges", "LegPress", "JumpSquats"),
+        listOf("BenchPress", "PushUps", "SitUps", "Face Pulls"),
+        listOf("Deadlift", "Supermans", "Rows")
     )
 
 

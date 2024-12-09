@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.liftnotes.databinding.FragmentFirstBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -121,9 +122,8 @@ class FirstFragment : Fragment(), DayAdapter.OnItemClickListener, ExerciseAdapte
     }
 
     override fun onItemClickEx(position: Int, exercise: String) {
-        sharedViewModel.currentExercise.value = exercise
-        sharedViewModel.currentFragment.value = "exercise"
-
+        ExerciseView.newInstanceEx(exercise)
+        findNavController().navigate(R.id.action_FirstFragment_to_ExerciseView)
     }
 
 }

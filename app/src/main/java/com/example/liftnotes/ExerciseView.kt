@@ -30,11 +30,7 @@ class ExerciseView : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ExHistoryAdapter
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var receiver: BroadcastReceiver
-    private lateinit var dayName: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,63 +48,53 @@ class ExerciseView : Fragment() {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         val graph = binding.graph
-        // Load exercises from ManageStorage
+
         lifecycleScope.launch {
             val context = requireContext()
-            val exercises = ManageStorage.loadWorkoutList(context)
+            val exercises = ManageStorage.loadWorkoutList(context).filter { it.liftName == exText }
             displayExercises(exercises)
-            var i = 0
-            var maxy = 0.0
-            val alreadyGraphed : MutableList<String> = ArrayList()
-            for (exercise in exercises) {
-                val dataListMutable : MutableList<DataPoint> = ArrayList()
-                if (alreadyGraphed.contains(exercise.liftName)) {
-                    continue
-                }
-                alreadyGraphed.add(exercise.liftName)
-                for (exercise2 in exercises) {
-                    if (exercise.liftName == exercise2.liftName) {
-                        dataListMutable.add(DataPoint(i.toDouble(), exercise2.weight.toDouble()))
-                        if (exercise2.weight > maxy) {
-                            maxy = exercise2.weight.toDouble()
-                        }
-                        i += 1
-                    }
 
-                }
-                val dataList = dataListMutable.toTypedArray()
+            val alreadyGraphed: MutableSet<String> = mutableSetOf()
+            var maxy = 0.0
+            for (exercise in exercises) {
+                if (alreadyGraphed.contains(exercise.liftName)) continue
+                alreadyGraphed.add(exercise.liftName)
+
+                val dataList = exercises.filter { it.liftName == exercise.liftName }
+                    .mapIndexed { i, e -> DataPoint(i.toDouble(), e.weight.toDouble()) }
+                    .toTypedArray()
                 val series = LineGraphSeries(dataList)
-                val rnd: Random = Random()
-                series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-                series.title = exercise.liftName; //BenchPress 10(2 for 200)
+
+                val rnd = Random()
+                series.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
+                series.title = exercise.liftName
                 graph.addSeries(series)
-                i = 0
+
+                maxy = maxOf(maxy, dataList.maxOf { it.y })
             }
-            graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE;
-            graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE;
+
+            graph.gridLabelRenderer.verticalLabelsColor = Color.WHITE
+            graph.gridLabelRenderer.horizontalLabelsColor = Color.WHITE
             graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
             graph.gridLabelRenderer.gridColor = Color.WHITE
-            //graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(activity)) // cant use dates due to no
-            //graph.viewport.setXAxisBoundsManual(true);                                     //dates in the data structure
             graph.setBackgroundColor(Color.parseColor("#00008B"))
-            //graph.gridLabelRenderer.setHumanRounding(false) // causes bad y axis bug sometimes
-            graph.viewport.setMinY(0.0) // can be removed if unwanted
+            graph.viewport.setMinY(0.0)
             graph.viewport.setMaxY(maxy)
-            graph.viewport.setYAxisBoundsManual(true);
-            graph.legendRenderer.isVisible = true;
+            graph.viewport.isYAxisBoundsManual = true
+            graph.legendRenderer.isVisible = true
             graph.legendRenderer.backgroundColor = 0
-            graph.legendRenderer.textColor=Color.WHITE
-            graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM;
-            graph.gridLabelRenderer.numHorizontalLabels = 3 // turn to zero to hide the x axis labels
+            graph.legendRenderer.textColor = Color.WHITE
+            graph.legendRenderer.align = LegendRenderer.LegendAlign.BOTTOM
+            graph.gridLabelRenderer.numHorizontalLabels = 3
             graph.gridLabelRenderer.numVerticalLabels = 3
         }
+
         binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_ExerciseView_to_FirstFragment)
         }
     }
 
     private fun displayExercises(exercises: List<ManageStorage.LiftInfo>) {
-        // Format exercises for display
         val formattedData = exercises.map {
             "${it.liftName} | ${it.sets}x${it.reps} | ${it.weight} lbs"
         }
@@ -122,7 +108,8 @@ class ExerciseView : Fragment() {
     }
 
     companion object {
-        private var exText = ""
+        private var exText: String = ""
+
         fun newInstanceEx(itemText: String) {
             exText = itemText
         }
